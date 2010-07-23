@@ -1,0 +1,55 @@
+<project name="PBServer Binary" default="buildBinary" basedir=".">
+
+   <description>Compile builtins for the shell app, and the server app. It also 
+         triggers build of the C++ stuff.</description>
+
+   <uptodate property="newBinaryFlag" targetfile="avmplus_sd.exe">
+      <srcfiles dir= "${basedir}/.." includes="**/*.as"/>
+      <srcfiles dir= "${basedir}/.." includes="**/*.cpp"/>
+      <srcfiles dir= "${basedir}/.." includes="**/*.h"/>
+   </uptodate>
+   
+   <condition property="isWindows">
+      <os family="windows"/>
+   </condition>
+   
+   <target name="determinePython" depends="pythonWindows,pythonOther">
+   </target>
+   
+   <target name="pythonWindows" if="isWindows">
+      <property name="PYTHON_PATH" value="c:\Python26\python.exe"/>
+      <echo message="On windows, python is at ${PYTHON_PATH}"/>
+   </target>
+   
+   <target name="pythonOther" unless="isWindows">
+      <property name="PYTHON_PATH" value="python"/>
+      <echo message="On non-windows, python is at ${PYTHON_PATH}"/>
+   </target>
+   
+   <target name="builtins" unless="newBinaryFlag" depends="determinePython">
+   
+      <!-- clear out files we will be regenerating. -->
+      <delete file="shell_toplevel.abc"/>
+      <delete file="shell_toplevel.h"/>
+      <delete file="shell_toplevel.h2"/>
+      <delete file="shell_toplevel.cpp"/>
+      <delete file="shell_toplevel.cpp2"/>
+
+      <!-- use python to regenerate -->
+      <apply executable="${PYTHON_PATH}" dir=".">
+         <fileset dir="." includes="shell_toplevel.py"/>
+      </apply>
+   </target>
+
+   <target name="buildBinary" depends="builtins"> <!-- unless="newBinaryFlag"> -->
+      <echo message="Updating binary."/>
+      <exec executable="cmd">
+         <arg value="/c"/>
+         <arg value="buildBinary.bat"/>
+      </exec>
+      <exec executable="${PYTHON_PATH}" dir=".">
+         <arg value="shell_toplevel.py"/>
+      </exec>
+   </target>
+</project>
+

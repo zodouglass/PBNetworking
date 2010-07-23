@@ -1,0 +1,30 @@
+<project name="PBServer Application" default="serverApp" basedir=".">
+
+   <description>Compile builtins for the shell app, and the server app. Recompiles
+         the binary on demand as well.</description>
+         
+   <property name="FLEX_HOME" value="C:\dev\flash\flex3.0.0"/>
+
+   <target name="triggerBuiltinsBuild">
+      <ant antfile="build.xml" dir="../tamarin-central/shell" target="buildBinary"/>
+   </target>
+
+   <target name="copyBuiltinsAndBinary" depends="triggerBuiltinsBuild">
+      <copy verbose="true" todir=".">
+         <fileset dir="../tamarin-central/shell/" includes="avmplus*.exe"/>
+      </copy>
+      <copy file="../tamarin-central/shell/shell_toplevel.abc" tofile="shell_toplevel.abc"/>
+      <copy file="../tamarin-central/core/builtin.abc" tofile="builtin.abc"/>
+   </target>
+   
+   <target name="serverApp" depends="copyBuiltinsAndBinary">
+      <java jar="../tamarin-central/utils/asc.jar" fork="true" failonerror="true">
+         <arg line="-d -import builtin.abc -import shell_toplevel.abc -library-path+=. -debug=true serverMain.as"/>
+      </java>
+      <copy file="serverMain.abc" tofile="../../bin/serverMain.abc"/>
+      <copy verbose="true" todir="../../bin">
+         <fileset dir="../tamarin-central/shell/" includes="avmplus*.exe"/>
+      </copy>
+   </target>
+
+   </project>

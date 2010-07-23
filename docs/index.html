@@ -1,0 +1,283 @@
+<html>
+<head>
+<title>PBNetworking Manual</title>
+   <script type="text/javascript" src="js/pageToc.js"></script>
+   <script type="text/javascript" src="js/sh/scripts/shCore.js"></script>
+   <script type="text/javascript" src="js/sh/scripts/shBrushJScript.js"></script>
+   <script type="text/javascript" src="js/sh/scripts/shBrushPhp.js"></script>
+   <script type="text/javascript" src="js/sh/scripts/shBrushPlain.js"></script>
+   <script type="text/javascript" src="js/sh/scripts/shBrushXml.js"></script>
+   <link type="text/css" rel="stylesheet" href="js/sh/styles/shCore.css"/>
+   <link type="text/css" rel="stylesheet" href="js/sh/styles/shThemeDefault.css"/>
+   <script type="text/javascript">
+   		SyntaxHighlighter.config.clipboardSwf = 'js/sh/scripts/clipboard.swf';
+   		SyntaxHighlighter.all();
+   </script>
+</head>
+<body>
+
+<h1>PBNetworking Manual</h1>
+
+<p>Congratulations on your purchase of the PushButton Networking Kit! PBNetworking makes it easy to build networked Flash games.</p>
+
+<p>You will need at least PushButton Engine revision 66 to use the PBNetworking components.</p>
+
+<p>Please visit the <a href="http://pushbuttonengine.com/forum/viewforum.php?f=1">beta forums</a> for support, feedback, and questions.</p>
+
+<p><b>NOTE:</b> This component kit is still in private beta. You are under NDA. Do not distribute it without checking with PushButton Labs first. If you would like to use it in a project, please <a href="mailto:engine@pushbuttonengine.com">contact us</a>. We are happy to work with you, but since this is an early release we want to be careful where it shows up. Thanks for understanding.</p> 
+
+   <div id="pageToc"></div>
+
+   <div id="contentArea">
+
+<h2>What is PBNetworking?</h2>
+
+<p>PushButton Networking is a high-efficiency, low-latency networking library for ActionScript 3 Flash games. It lets you build bigger, better, faster networked games more quickly. PushButton Networking uses the same networking techniques found in fast-action AAA games such as Quake, Tribes, Far Cry, and Unreal.</p>
+
+<p>PushButton Networking is focused on making the connection between client and server as lean, efficient, and cheater-free as possible. It comes with a server binary that lets you write your game server in ActionScript and run it with no extra work. </p>
+
+<p><i>Note: MMOs require high availability, clustered backends. You may find that other technologies will be better for building this sort of backend than the server which comes with PushButton Networking. For communicating between your servers and client, PushButton Networking is still an excellent choice (contact us for versions in other languages).</i></p>
+
+<h2>Code Layout</h2>
+
+<p>There are three projects that come with this kit:</p>
+
+<ul>
+
+<li><b>PBNetworking</b>, which has all the ActionScript networking components as well as source code for the native server.</li>
+
+<li><b>PBNetworkingTests</b>, which contains unit tests for the functionality in PBNetworking.</li>
+
+<li><b>PBNetworkingDemo</b>, which contains an example networked game. To run this demo, launch a server using the method described in readme.txt in PBNetworking/Server. Then launch the SWF from this demo, which will connect to localhost and start running a simple networked game.</li>
+
+</ul>
+
+<h2>What is in the Kit?</h2>
+
+<p>The networking library comes in two pieces: a native C++ server binary based on Tamarin (in PBNetworking/Server), and a networking library written in ActionScript that runs on client and server (in PBNetworking/Source).</p>
+
+<p>We have backends in several other languages as well, including Java. <a href="mailto:engine@pushbuttonengine.com">Contact us</a> for details on getting ahold of these.</p>
+
+<p>Three kinds of networking are supported by this kit. Each kind builds on the previous.</p>
+
+<ul>
+<li><b>Bit packed data transmission</b>, for very efficient use of bandwidth. Even on fast broadband connections, efficiency leads to a richer, more responsive experience for players. This layer also deals with sending data over TCP in a way designed to reduce latency and increase responsiveness. This is implemented by the BitStream class, and an XML description for indicating data form as well as serializing/deserializing is implemented in the PBLabs.Networking.Elements package.</li>
+<li><b>Event passing</b>. A framework for sending and receiving bitpacked events is provided. This is implemented in PBLabs.Networking.Events; most user events will subclass GenericNetEvent.</li>
+<li><b>Most recent state</b> or "ghost" updates. This is a system for maintaining the state of many game objects efficiently, even when there is not enough bandwidth for the state of every object to be sent in every packet. This is implemented in PBLabs.Networking.Ghosting. Most of the time you will work with GhostConnection and GhostComponent to network your game objects.</li>
+</ul>
+
+<h2>How do I define my protocol?</h2>
+
+<p>Many networking systems either overspecify or underspecify their protocols. An underspecified protocol is one where information is sent that could be inferred. For instance, nearly every XML protocol will send both the name of a field and the data contained in it, ie, &lt;name&gt;Bob&lt;/name&gt;. The specification for the protocol is not precise enough, so extra data must be sent for the other end to make sense of it.</p>
+
+<p>An overspecified protocol is one where not enough information is provided for every party to process the data. For instance, some protocols are dependent on the two parties having exactly the same binary - and if you rebuild the game, then the protocol gets out of sync! The specification of the protocol is so detailed and precise - since it is encoded right in the compiled source code of the application - that it is hard for anyone else to make sense of data coming over the wire.</p>
+
+<p>If you have 5kb/sec of bandwidth to spend on a client, would you rather be able to fit 50 updates or 500? The goal of PBNetworking is to let you specify exactly what should be sent over the wire without incurring any overhead, and without being tied to a specific binary. This is done by building an XML description of how data should be serialized - specifying how many bits a number should be packed into, when certain pieces should be sent, how strings should be sent, etc. Then, anyone who has the protocol XML description and a little bit of specialized knowledge can communicate with anyone else who has the protocol XML file.</p>
+
+<p>A protocol XML file looks like this: (This example is taken from the PBNetworkDemo.)</p>
+
+<pre class="brush: xml;">
+   &lt;!-- The root tag. --&gt;
+   &lt;library&gt;
+      &lt;!-- The type can be event, ghost, or fragment. Event tags describe events, ghost fragments are used for most-recent-state updates, and fragments are for miscellaneous use. --&gt;
+           
+      &lt;!--This tag defines the event that is used to send chat message. It is sent both ways - client to server and back. --&gt;
+      &lt;event name="chat"&gt;
+         &lt;!-- Each child tag defines a field type and has attributes indicating the name and how the data will be encoded. Data is always written into the packet in the order of the tags. --&gt; 
+              
+         &lt;!-- In this case, this string is used to send the chat message. --&gt;
+         &lt;string name="message"/&gt;
+      &lt;/event&gt;
+      
+      &lt;!-- This event is sent when the user clicks, ordering the circles to move somewhere. It is sent from the client to the server. --&gt;
+      &lt;event name="circle"&gt;
+        
+        &lt;!-- A rangedInt encodes an integer value that can range from min to max. In this case, the x and y positions where the client clicked are sent. --&gt;
+        &lt;rangedInt name="x" min="0" max="1000"/&gt;
+        &lt;rangedInt name="y" min="0" max="1000"/&gt;
+      &lt;/event&gt;
+      
+      &lt;!-- This is the protocol description for most recent state updates for the moving circles. Whenever the goal for a circle changes, the this update is sent. --&gt;
+      &lt;ghost name="CircleGhost"&gt;
+         
+         &lt;!-- Some fields can contain other fields. A dirtyFlag contains other fields. It tracks when they are changed, and only sends them if they are dirty. It is only meaningful in a ghost update; otherwise it acts like a flag field, which sends its children when it is set to true. --&gt; 
+         &lt;dirtyFlag name="flag1"&gt;
+            &lt;rangedInt name="x" min="0" max="1000"/&gt;
+            &lt;rangedInt name="y" min="0" max="1000"/&gt;
+            &lt;flag name="state"/&gt;
+         &lt;/dirtyFlag&gt;
+      &lt;/ghost&gt;
+   &lt;/library&gt;</pre>
+
+   <p>All of this protocol stuff is dealt with by the NetRoot class. You load protocol data into NetRoot via the static method NetRoot.LoadNetProcotol. Then, as needed, you can request protocol data via NetRoot.GetByName. This method returns a NetRoot instance, which tracks all the data that will be sent across the wire and how it will be sent. All the code using it needs to know is what the names of the fields are, so it can indicate to the NetRoot what their values are.</p>
+   
+   <p>Getting/setting fields is easy. The following code snippet shows a simple protocol description and code to get/set fields on it.</p>
+   
+   <pre class="brush: js">
+   // Simple example event - load the definition.
+   var protocolXML:XML = 
+      &lt;things&gt;
+         &lt;event name="TestEvent"&gt;
+            &lt;rangedInt name="MyIntegerField"/&gt;
+            &lt;float name="MyFloatField" bitCount="10"/&gt;
+            &lt;flag name="MyBooleanField"&gt;
+               &lt;string name="MyStringField"/&gt;
+            &lt;/flag&gt;
+         &lt;/event&gt;
+      &lt;/things&gt;;
+   NetRoot.LoadNetProtocol(protocolXML.toXMLString());
+   
+   // Now, get it in NetRoot form.
+   var root:NetRoot = NetRoot.GetByName("myevent");
+   
+   // We can get/set values.
+   (root.GetElement("MyIntegerField") as IIntegerNetElement).SetValue(1);
+   (root.GetElement("MyFloatField") as IFloatNetElement).SetValue(0.2);
+   (root.GetElement("MyStringField") as IStringNetElement).SetValue("hello");
+   (root.GetElement("MyBooleanField") as IBooleanNetElement).SetValue(true);
+   
+   // To write to a BitStream, just pass it to the NetRoot.
+   var bs:BitStream = new BitStream(1024);
+   root.Serialize(bs);
+   
+   // You can read from the BitStream just as easily. This updates the
+   // elements based on what was just read.
+   root.Deserialize(bs);
+   </pre>
+   
+   <p>Most of the time you won't need to work with NetRoot directly. There are two places that use this protocol data. And we'll discuss them in the next two sections.</p>
+   
+   <h2>How do I create and send an event?</h2>
+   
+   <p>Most of the time you will subclass your event from GenericNetEvent. It provides a convenient way to implement new events with minimal work. If you need custom behavior, you can also directly subclass NetEvent.</p>
+   
+   <p>Here's a simple example of a chat event. Notice you have to provide both a protocol definition, as well as an AS3 class to make this work.</p>
+   
+   <pre class="brush: xml">
+   &lt;!-- The protocol XML fragment for the event. --&gt;
+   &lt;event name="chat"&gt;
+      &lt;string name="message"/&gt;
+   &lt;/event&gt;
+   </pre>
+   
+   <pre class="brush: js">
+   // The class implementing the chat event. It extends GenericNetEvent, which
+   // does the bulk of the work.
+   public class ChatEvent extends GenericNetEvent
+   {
+      public var message:String;
+      
+      // The constructor lets you easily create a new chat event by doing:
+      //    var ce:ChatEvent = new ChatEvent("Hey world!");
+      // However it must always be possible to call with no arguments so
+      // that the event can be created in response to incoming data.
+      public function ChatEvent(msg:String = null)
+      {
+         // Indicate the protocol element we will be using to 
+         // the superclass.
+         super("chat");
+         
+         // Register the message member of this event; GenericNetEvent will look
+         // for a matching field in the protocol XML (shown above).
+         registerField("message");
+
+         message = msg;
+      }
+      
+      // This is called when the event is received.
+      public override function process(conn:EventConnection):void
+      {
+         // Because message was registered with registerField, GenericNetEvent
+         // will have already deserialized our event's data and set the field
+         // for us by the time process is called.
+         Logger.Print(this, "Chat received: " + message);
+      }
+   }
+   
+   // You also have to register the ChatEvent so the networking system knows
+   // to instantiate it in response to "chat" events.
+   NetEvent.registerClass("chat", ChatEvent);
+   </pre>
+   
+   <p>That's how you create a new event type. To send it, all you have to do is get ahold of a connected EventConnection and queue the event for transmission. Here's how you would send a chat event out to everyone connected to your server:</p>
+   
+   <pre class="brush: js">
+   NetworkInterface.Instance.ForEachConnection(function (nc:NetworkConnection):void
+   {
+      if(nc is EventConnection)
+         (nc as EventConnection).PostEvent(new ChatEvent("Hey buddy!"));
+   });
+   </pre>
+   
+   <h2>How do I ghost an object?</h2>
+   
+   <p>Ghosting objects is fairly simple. However, even with the aid of our components, it takes care to produce a really world-class networked game. Ultimately, the game itself must be aware of the fact it is networked and take steps to mitigate latency to give the best experience. Despite this, for many games, ghosting will "just work" without a lot of extra effort.</p>
+   
+   <p>First, build your game object normally, and identify what fields need to be networked. The more you network, the fewer updates can be sent over a fixed amount of bandwidth, and the less responsive the game will be. In addition, the fields you identify will be updated at irregular intervals on the client, so it is best to choose fields that won't cause lots of popping for the user.</p>
+   
+   <p>For instance, in the PBNetworkingDemo, we network the <b>goal position</b>, not the actual position. Then, the circle entities smoothly interpolate towards that point at a fixed rate. This effectively hides latency, while still giving responsive motion when the server updates the goal position.</p>
+   
+   <p>In any case, once you know what fields should be networked, you add a GhostComponent and identify those fields and what field in a NetRoot they should be mapped to. You also need to provide a protocol description. For the circles this looks like this:</p>
+   
+   <pre class="brush: xml">
+   &lt;!-- Protocol description for the circle --&gt;
+   &lt;ghost name="CircleGhost"&gt;
+      &lt;dirtyFlag name="flag1"&gt;
+         &lt;rangedInt name="x" min="0" max="1000"/&gt;
+         &lt;rangedInt name="y" min="0" max="1000"/&gt;
+         &lt;flag name="state"/&gt;
+      &lt;/dirtyFlag&gt;
+   &lt;/ghost&gt;   
+   </pre>
+   
+   <pre class="brush: xml">
+   &lt;!-- The ghost component as seen on the Circle entity. --&gt;
+   &lt;component type="PBLabs.Networking.Ghosting.GhostComponent" name="Ghost"&gt;
+      &lt;GhostInstance&gt;
+         &lt;!-- This is used to indicate what entity the clients should instantiate to show the circle. It must have a matching GhostComponent entity on it. --&gt;
+         &lt;PrototypeName&gt;ClientCircle&lt;/PrototypeName&gt;
+         
+         &lt;!-- The protocol block to use. --&gt;
+         &lt;ProtocolName&gt;CircleGhost&lt;/ProtocolName&gt;
+         
+         &lt;!-- The list of properties to use and what field on the protocol they map to. --&gt;
+         &lt;TrackedProperties&gt;
+            &lt;_&gt;
+               &lt;Property&gt;@Mover.GoalPosition.x&lt;/Property&gt;
+               &lt;ProtocolField&gt;x&lt;/ProtocolField&gt;
+            &lt;/_&gt;
+            &lt;_&gt;
+               &lt;Property&gt;@Mover.GoalPosition.y&lt;/Property&gt;
+               &lt;ProtocolField&gt;y&lt;/ProtocolField&gt;
+            &lt;/_&gt;
+         &lt;/TrackedProperties&gt;
+      &lt;/GhostInstance&gt;
+   &lt;/component&gt;
+   </pre>
+   
+   <p>That's everything you need to send most recent state updates for the circle across the wire to a client. However, you also have to have some support logic in your game code, so that the networking components know <i>which</i> entities to transmit state for. This requires a little setup code when you establish the connection.</p>
+   
+   <pre class="brush: js">
+   var gc:GhostConnection; 
+   
+   // On client and server, you must call ActivateGhosting to turn on ghosting.
+   gc.ActivateGhosting(true);
+   
+   // You must also specify a scope object on the server end:   
+   gc.ScopeObject = someObject;
+   </pre>
+   
+   <p>The scope object implements IScoper, which defines a single method, ScopeObjects, which is passed a GhostManager. The scope object is required to iterate over active game entities and mark them as in scope. Marking an entity in scope is done by getting its Ghost from its GhostComponent, calling CheckTrackedProperties() to update what fields need to be transmitted if any, and then calling MarkGhostInScope on the GhostManager, passing the GhostComponent. Or in other words:</p>
+   
+   <pre class="brush: js">
+   // Marking an entity as in scope, in response to a scope query.
+   var g:Ghost = (inScopeEntity.LookupComponentByType(GhostComponent) as GhostComponent).GhostInstance;
+   g.CheckTrackedProperties();
+   ghostManager.MarkGhostInScope(g, 1.0);
+   </pre>
+   
+   <p>The PBNetworkingDemo is the best example for how all these pieces need to interact. Once you get the hang of it, it's straightforward - and of course, you can always ask for help, get clarification, or complain about vague documentation on the <a href="http://pushbuttonengine.com/forum/viewforum.php?f=3">beta forums</a>!</p> 
+   
+   </div>
+</body>
+</html>

@@ -1,0 +1,41 @@
+PushButton Networking End User Product License Agreement ("License")
+
+By installing or using this library, you ("Licensee") agree to be bound by the terms of this licensing agreement.
+
+I. LICENSE AGREEMENT
+
+This sets forth the entire agreement between PushButton Labs, LLC. ("Licensor") and the Licensee relating to the use of the library source code ("PBN Library") downloadable from pushbuttonengine.com or distributed by Licensor's officially sanctioned affiliates or distributors.
+
+II. LICENSE GRANT.
+
+The Library is licensed, not sold. Subject to the terms of this License, Licensor grants Licensee a limited non-exclusive, non-transferable license to use the Library by a single seat assigned to an individual or company, for specific purposes of making source code, object code, for an unlimited number of products. Licensee may publicly sell, distribute, release, publish any products created with Library except where specifically prohibited in Section III.
+
+III. RESTRICTIONS.  Licensee may not: (a) Include, resell, repackage, or otherwise distribute the Library, Library source code or Library documentation to the library in any manner or medium, unless recipient also has a separate license to the Library, (b) Create any derivative works of the library including porting to any other platform or format; Use this License if company annual revenue is greater than $500,000 [purchase the PushButton Networking Commercial License for companies with revenue greater than $500,000 annually]
+
+IV. FEES.
+
+The License fee for the Library is the price set on the PushButton Engine website (pushbuttonengine.com) per each programmer using or accessing the source code to the Library. In addition, this License carries the additional requirements for any products created or distributed under this license.  Logo display requirement: Licensee agrees to display a PushButton Networking logo in the start up sequence of any product created and released with the library. [The logo display conditions may be removed by purchasing the PushButton Networking Commercial License]. 2. If product has no applicable startup sequence, the PushButton Networking Logo and link to the PushButton Engine website (pushbuttonengine.com) must be included in some form within the documentation, website, display, or other included media. For clarification or help with this requirement Licensor may be contacted at anytime at webmaster@pushbuttonengine.com.
+
+V. TERMINATION.
+
+Licensor may terminate this License at anytime without prejudice in the event of material breach of any of its terms and conditions by Licensee. Upon termination, Licensee shall destroy all copies of the library. Licensee's access to the PushButton Networking forums and SVN access to source upgrades may be pulled at PushButton Labs sole discretion that Licensee is not abiding by reasonable rules and etiquette regarding such access.
+
+VI. DISCLAIMER OF WARRANTY.
+
+THERE IS NO WARRANTY FOR THE LIBRARY, TO THE EXTENT PERMITTED BY APPLICABLE LAW. EXCEPT WHEN OTHERWISE STATED IN WRITING THE COPYRIGHT HOLDERS AND/OR LICENSOR AND OTHER PARTIES PROVIDE THE LIBRARY “AS IS” WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE. THE ENTIRE RISK AS TO THE QUALITY AND PERFORMANCE OF THE LIBRARY IS WITH LICENSEE. SHOULD THE LIBRARY PROVE DEFECTIVE FOR ANY PURPOSE, LICENSEE ASSUMES THE COST OF ALL NECESSARY SERVICING, REPAIR OR CORRECTION. 
+
+VII. LIMITATION OF LIABILITY.
+
+Neither party shall be liable for any indirect, special, incidental, punitive or consequential damages, including but not limited to loss of data, business interruption, or loss of profits, arising out of the use of or the inability to use the Licensed Materials.  In no event will Licensor be liable to any user for any damages, whether direct, indirect, incidental or consequential, arising out of the use or inability to use the licensed Library, even if Licensor has been advised of the possibility of such damages. 
+
+VII. LICENSEE'S REPRESENTATIONS, WARRANTIES & INDEMNIFICATION.
+
+Licensee shall defend, indemnify and hold harmless Licensor, subsidiaries, affiliated companies and partners and their respective officers, directors, employees and agents from and against any and all liabilities, damages, costs and fees (including reasonable attorneyís fees) resulting from or relating to: (i) any third party claims or lawsuits related to the Library and assignment of intellectual property ownership hereunder; (ii) any third party claims or lawsuits related to any and all obligations Licensee has undertaken to perform hereunder; or (iii) a breach of any representations and warranties Licensee has made hereunder. Such indemnification obligation of Licensee is conditioned upon Licensor immediately notifying Licensee in a writing that sets forth with specificity the claim or action to which such indemnification obligation applies. 
+
+VIII. MISCELLANEOUS.
+
+This License constitutes the entire agreement between the parties. This License replaces and supersedes any prior agreement entered into between the parties hereto with respect to the subject matter herein and may only be modified, altered, or amended by an instrument in writing signed by Licensor.
+
+This License shall be governed by the laws of the United States and the State of Oregon, except for its conflicts of laws principles. Exclusive jurisdiction over and venue of any suit arising out of or relating to this License will be in the state and federal courts of Lane County, Oregon. If for any reason a court of competent jurisdiction finds any provision, or portion thereof, to be unenforceable, the remainder of this License shall continue in full force and effect. Licensee may not assign or otherwise transfer by operation of law or otherwise this License or any rights or obligations herein.
+
+If you have any questions about this License, or if you want to contact PushButton Labs for any reason, please direct all correspondence to: PushButton Labs, LLC., 392 E. 3rd Street, Suite #100, Eugene, OR 97401, United States of America or email webmaster@pushbuttonengine.com

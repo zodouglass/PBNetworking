@@ -1,0 +1,78 @@
+<library version="1">
+   <entity name="SpatialDB">
+      <component type="com.pblabs.rendering2D.BasicSpatialManager2D" name="Manager"/>
+   </entity>
+   <entity name="Scene">
+      <component type="com.pblabs.rendering2D.Scene2DComponent" name="Scene">
+         <SpatialDatabase componentReference="SpatialDB"/>
+         <SceneViewName>graphicsCanvas</SceneViewName>
+         <RenderMask><_>Renderable</_></RenderMask>
+         <Position>
+            <x>320</x>
+            <y>123</y>
+         </Position>
+      </component>
+   </entity>
+   <template name="ServerCircle">
+      <component type="com.pblabs.rendering2D.Interpolated2DMoverComponent" name="Mover">
+         <SpatialManager componentReference="SpatialDB"/>
+         <TranslationSpeed>100</TranslationSpeed>
+         <ObjectMask><_>Renderable</_></ObjectMask>
+      </component>
+      <component type="com.pblabs.networking.ghosting.GhostComponent" name="Ghost">
+         <GhostInstance>
+            <PrototypeName>ClientCircle</PrototypeName>
+            <ProtocolName>CircleGhost</ProtocolName>
+            <TrackedProperties>
+               <_>
+                  <Property>@Mover.goalPosition.x</Property>
+                  <ProtocolField>x</ProtocolField>
+               </_>
+               <_>
+                  <Property>@Mover.goalPosition.y</Property>
+                  <ProtocolField>y</ProtocolField>
+               </_>
+            </TrackedProperties>
+         </GhostInstance>
+      </component>
+   </template>
+
+   <template name="ClientCircle">
+      <component type="com.pblabs.rendering2D.Interpolated2DMoverComponent" name="Mover">
+         <SpatialManager componentReference="SpatialDB"/>
+         <TranslationSpeed>100</TranslationSpeed>
+         <ObjectMask><_>Renderable</_></ObjectMask>
+      </component>
+      <component type="com.pblabs.rendering2D.SimpleShapeRenderComponent" name="Renderer">
+         <ShowCircle>true</ShowCircle>
+         <Radius>32</Radius>
+         <PositionReference>@Mover.position</PositionReference>
+         <RotationReference>@Mover.rotation</RotationReference>
+      </component>
+      <component type="com.pblabs.networking.ghosting.GhostComponent" name="Ghost">
+         <GhostInstance>
+            <ProtocolName>CircleGhost</ProtocolName>
+            <TrackedProperties>
+               <_>
+                  <Property>@Mover.goalPosition.x</Property>
+                  <ProtocolField>x</ProtocolField>
+               </_>
+               <_>
+                  <Property>@Mover.goalPosition.y</Property>
+                  <ProtocolField>y</ProtocolField>
+               </_>
+               <_>
+                  <InitialUpdateOnly>true</InitialUpdateOnly>
+                  <Property>@Mover.position.x</Property>
+                  <ProtocolField>x</ProtocolField>
+               </_>
+               <_>
+                  <InitialUpdateOnly>true</InitialUpdateOnly>
+                  <Property>@Mover.position.y</Property>
+                  <ProtocolField>y</ProtocolField>
+               </_>
+            </TrackedProperties>
+         </GhostInstance>
+      </component>
+   </template>
+</library>

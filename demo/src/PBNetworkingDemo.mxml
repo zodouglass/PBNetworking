@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Application xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute" 
+   applicationComplete="kickoff();" width="640" height="480" 
+   xmlns:pb="com.pblabs.engine.mxml.*" xmlns:pbui="com.pblabs.rendering2D.ui.*">
+   
+   <!-- Components we will use - reference them here so they get linked in. -->
+   <pb:TypeReference type="com.pblabs.rendering2D.Interpolated2DMoverComponent"/>
+   <pb:TypeReference type="com.pblabs.rendering2D.BasicSpatialManager2D"/>
+   <pb:TypeReference type="com.pblabs.rendering2D.Scene2DComponent"/>
+   <pb:TypeReference type="com.pblabs.rendering2D.SimpleShapeRenderComponent"/>
+   
+   <!-- This isn't actually a component, but it needs to be available for the server
+        to host our game - so force a reference to allow it to be linked in. -->
+   <pb:TypeReference type="ServerGame"/>
+   
+   <!-- Embed the level file. -->
+   <pb:ResourceBinding filename="level.xml" resourceType="com.pblabs.engine.resource.XMLResource" 
+      resourceClass="@Embed(source='level.xml', mimeType='application/octet-stream')"/>
+
+   <mx:Script>
+      <![CDATA[
+      import com.pblabs.engine.debug.*;
+      import com.pblabs.engine.core.*;
+      import com.pblabs.networking.events.*;
+      import com.pblabs.networking.ghosting.*;
+      import com.pblabs.networking.elements.*;
+      import flash.system.Security;
+      
+      /**
+       * Connection to the server.
+       */ 
+      public var connection:GhostConnection;
+      
+      /**
+       * Last six chat/log messages are stored here.
+       */
+      public var lastChatMessages:Array = new Array(6);
+      
+      /**
+       * We do a very cheap trick to have usernames show up - prepend them when
+       * we send the chat messages! This is a bad idea for any sort of production
+       * code.
+       */ 
+      public var username:String = "None";
+
+      /**
+       * Called once app is loaded.
+       */ 
+      private function kickoff():void
+      {
+      	 Global.startup(this);
+         
+         // Hook into the logger so the user can see status messages.
+         Logger.instance.addEventListener(LogEvent.ENTRY_ADDED_EVENT, function (e:LogEvent):void 
+           {
+               lastChatMessages.push("Log: " + e.entry.message);
+               lastChatMessages.shift();
+               
+               updateChatWindow();
+           });
+         
+         // This just loads our network protocol and register our net events.
+         // We could run the code directly here, but having it in one shared
+         // place saves time and headache.
+         ServerGame.initializeGameData();
+         
+         // Make it so we can handle chat events.
+         ChatEvent.onChatCallback = function(e:ChatEvent):void
+            {
+               // Push the chat text at the end of the array.
+               lastChatMessages.push(e.message);
+               lastChatMessages.shift();
+               
+               // Update the chat window.
+               updateChatWindow();
+            };
+         
+         // Start loading the level data.
+         TemplateManager.instance.addEventListener(TemplateManager.LOADED_EVENT, _OnLoaded);
+         TemplateManager.instance.loadFile("level.xml");
+      }
+      
+      /**
+       * Called when we have loaded and parsed our level data.
+       */ 
+      private function _OnLoaded(e:*):void
+      {
+         Logger.print(this, "Loaded templates!");
+         
+         // Create the scene.
+         Logger.print(this, "Creating SpatialDB and Scene...");
+         TemplateManager.instance.instantiateEntity("SpatialDB");
+         TemplateManager.instance.instantiateEntity("Scene");
+         
+         // Pop up the dialog.
+         var cd:ConnectDialog = new ConnectDialog();
+         addChild(cd);
+         cd.x = (640 / 2) - cd.width / 2;
+         cd.y = (480 / 2) - cd.height / 2;
+      }
+
+      /**
+       * Fill the chat window with the last few chat messages.
+       */
+      private function updateChatWindow():void
+      {
+          txtChatLog.text = "";
+          for each(var m:String in lastChatMessages)
+             txtChatLog.text += (m != null ? m : "") + "\n";           
+      }
+      
+      /**
+       * Flag to store whether we've cleared the chat info message.
+       */ 
+      private var clearOnce:Boolean = false;
+      
+      /**
+       * Clear out the helpful message in the chat box the first time we click on it.
+       */
+      private function handleChatClear(e:*):void
+      {
+         if(txtChatInput.text == "Type here and press enter to chat.")
+         {
+            if(clearOnce)
+              return;
+            clearOnce = true;
+            
+            txtChatInput.text = "";
+         }
+      }
+      
+      public function startConnect(host:String, port:int, inUsername:String):void
+      {
+         // Connect, as we now have access to our templates.
+         Logger.print(this, "Creating connection to " + host + ":" + port + " as '" + inUsername + "'...");
+         connection = new GhostConnection();
+         connection.connectToServer(host, port);
+         connection.activateGhosting();
+         
+         username = inUsername;
+      }
+
+      /**
+       * Send a chat event if user hits enter.
+       */ 
+      private function handleChatKey(e:KeyboardEvent):void
+      {
+         // keycode 13 is Enter
+         if(e.keyCode == 13)
+         {
+            // Send a chat message on the EventConnection and clear the text box.
+            if(connection)
+               connection.postEvent(new ChatEvent(username + ": " + txtChatInput.text));
+            txtChatInput.text = "";
+         }
+      }
+      
+      /**
+       * When user clicks on the graphics canvas, send an event with the position to the server.
+       */ 
+      private function _OnCircleClick(event:MouseEvent):void
+      {
+         var localPoint:Point = graphicsCanvas.globalToLocal(new Point(event.stageX, event.stageY));
+
+         var c:CircleEvent = new CircleEvent();         
+         c.x = localPoint.x;
+         c.y = localPoint.y;
+         if(connection)
+            connection.postEvent(c);
+      }
+      ]]>
+   </mx:Script>
+   
+   <!-- Chat dialog -->
+   <mx:Panel x="10" y="306" width="620" height="164" layout="absolute" title="Chat">
+      <mx:TextInput x="0" y="102" width="600" id="txtChatInput" editable="true" text="Type here and press enter to chat." click="handleChatClear(event)" keyDown="handleChatKey(event);"/>
+      <mx:Text x="0" y="0" width="600" height="94" id="txtChatLog" color="#000000" alpha="1.0"/>
+   </mx:Panel>
+   
+   <!-- Graphics area for circles. -->
+   <pbui:FlexSceneView x="10" y="53" width="620" height="245" id="graphicsCanvas" name="graphicsCanvas" backgroundColor="#000000" mouseUp="_OnCircleClick(event);">
+   </pbui:FlexSceneView>
+   
+   <!-- Game caption. -->
+   <mx:Text x="10" y="10" text="Circle Click: Multiplayer Extreme Edition" fontSize="24" color="#000000" textAlign="center" width="620"/>
+</mx:Application>

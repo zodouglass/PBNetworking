@@ -1,0 +1,1 @@
+start avmplus_sd serverMain.abc

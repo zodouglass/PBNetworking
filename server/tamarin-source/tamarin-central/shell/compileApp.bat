@@ -1,0 +1,1 @@
+java -jar ..\utils\asc.jar -d -import ..\core\builtin.abc -import shell_toplevel.abc -library-path+=. -debug=true helloworld.as
