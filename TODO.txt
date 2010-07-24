@@ -1,0 +1,3 @@
+ - Clean Readme file, we no longer even have the Engine Manager.
+ - Clean the documentation, It talks about using Revision 66 of the engine... seriously.
+ - Create an Adobe AIR application that can act as the server.
