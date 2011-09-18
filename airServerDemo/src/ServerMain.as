@@ -68,7 +68,7 @@ package
             scene.y = 0;
             scene.width = 640;
             scene.height = 480;
-            addChild(scene);
+            addChild(scene); //must be added to the stage or PBE complains
 			
 			//PBE requires a scene at startup, so pass the server scene, which we can remove later
 			PBE.startup(scene);

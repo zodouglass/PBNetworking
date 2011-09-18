@@ -171,8 +171,8 @@
 		Logger.print(this, "Click " + localPoint );
 		
          var c:CircleEvent = new CircleEvent();         
-         c.x = -graphicsCanvas.width/2 + localPoint.x;//-310+ localPoint.x ;
-         c.y = -graphicsCanvas.height/2 + localPoint.y; //-122 + localPoint.y ;
+         c.x = -graphicsCanvas.width/2 + localPoint.x;
+         c.y = -graphicsCanvas.height/2 + localPoint.y;
          if(connection)
             connection.postEvent(c);
       }
