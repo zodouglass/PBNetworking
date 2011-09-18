@@ -26,3 +26,14 @@ twitpic_dump.zip
 
 #ignore html-template
 **/*/html-template/**/*
+
+#ignore flash develop project files
+/airServerDemo/Run.bat
+/airServerDemo/bat
+/airServerDemo/bin
+/airServerDemo/lib
+/airServerDemo/obj
+/airServerDemo/air
+/airServerDemo/AIR_readme.txt
+*.as3proj
+/airServerDemo/PackageApp.bat

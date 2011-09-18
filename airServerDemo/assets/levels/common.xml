@@ -1,0 +1,14 @@
+<things version="1">
+   <entity name="SpatialDB">
+      <component type="com.pblabs.rendering2D.BasicSpatialManager2D" name="Manager"/>
+   </entity>
+  <entity name="Scene">
+    <component type="com.pblabs.rendering2D.DisplayObjectScene" name="Scene">
+      <sceneViewName>MainView</sceneViewName>
+    </component>
+  </entity>
+  <group name="Common">
+    <objectReference name="SpatialDB"/>
+    <objectReference name="Scene"/>
+  </group>
+</things>

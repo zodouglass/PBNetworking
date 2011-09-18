@@ -1,8 +1,9 @@
 package com.pblabs.networking.ghosting
 {
-   import com.pblabs.engine.entity.*;
+   import com.pblabs.engine.PBE;
    import com.pblabs.engine.core.*;
    import com.pblabs.engine.debug.*;
+   import com.pblabs.engine.entity.*;
    import com.pblabs.networking.core.*;
    
    import flash.events.*;
@@ -37,14 +38,14 @@ package com.pblabs.networking.ghosting
          ghostInstance.onOutOfScope = function():void { owner.destroy(); }
 
          // Tick so we update our dirty state.
-         ProcessManager.instance.addTickedObject(this);
+        PBE.processManager.addTickedObject(this);
       }
       
       protected override function onRemove():void
       {
          ghostInstance.trackedObject = null;
          ghostInstance.onOutOfScope = null;
-         ProcessManager.instance.removeTickedObject(this);
+		 PBE.processManager.removeTickedObject(this);
       }
    }
 }

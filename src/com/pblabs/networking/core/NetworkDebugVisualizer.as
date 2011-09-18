@@ -38,8 +38,8 @@ package com.pblabs.networking.core
       public function NetworkDebugVisualizer()
       {
          // Find the debug text area.
-         if(Application.application.hasOwnProperty("netDebugTextArea"))
-            Application.application.netDebugTextArea.htmlText = "";
+         if(FlexGlobals.topLevelApplication.hasOwnProperty("netDebugTextArea"))
+            FlexGlobals.topLevelApplication.netDebugTextArea.htmlText = "";
       }
       
       public function reportOutgoingTraffic(data:ByteArray):void
@@ -82,12 +82,12 @@ package com.pblabs.networking.core
             log.shift();
          
          // Regenerate the text.
-         if(Application.application.hasOwnProperty("netDebugTextArea"))
+         if(FlexGlobals.topLevelApplication.hasOwnProperty("netDebugTextArea"))
          {
-            Application.application.netDebugTextArea.htmlText = "";
+            FlexGlobals.topLevelApplication.netDebugTextArea.htmlText = "";
             for(var i:int=log.length-1; i>=0; i--)
             {
-               Application.application.netDebugTextArea.htmlText += log[i];         
+               FlexGlobals.topLevelApplication.netDebugTextArea.htmlText += log[i];         
             }            
          }
       }

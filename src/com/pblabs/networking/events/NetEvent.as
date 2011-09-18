@@ -46,7 +46,7 @@ package com.pblabs.networking.events
          }
          catch(e:Error)
          {
-            Logger.printError(null, "createFromName", "Error creating event of type '" + name + "' - " + e.toString());
+            Logger.error(null, "createFromName", "Error creating event of type '" + name + "' - " + e.toString());
          }
          
          return null;

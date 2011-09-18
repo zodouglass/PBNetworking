@@ -1,7 +1,8 @@
 package com.pblabs.networking.ghosting
 {
-   import com.pblabs.engine.entity.*;
+   import com.pblabs.engine.PBE;
    import com.pblabs.engine.core.*;
+   import com.pblabs.engine.entity.*;
    
    /**
     * Ghost Factory that uses the TemplateManager to manufactore ghost instances.
@@ -17,7 +18,7 @@ package com.pblabs.networking.ghosting
       public function makeGhost(prototypeName:String):Ghost
       {
          var tm:TemplateManager = overrideTemplateManager;
-         if(!tm) tm = TemplateManager.instance;
+         if(!tm) tm = PBE.templateManager;
          
          // Try instantiating the specified template.
          var entity:IEntity = tm.instantiateEntity(prototypeName);

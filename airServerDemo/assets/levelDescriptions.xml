@@ -1,0 +1,14 @@
+<levelDescriptions>
+   <level index="0">
+      <file filename="../assets/levels/templates.xml"/>
+      <file filename="../assets/levels/common.xml"/>
+      <group name="Common"/>
+   </level>
+   <level index="1" name="Bowl">
+      <file filename="../assets/levels/templates.xml"/>
+      <file filename="../assets/levels/common.xml"/>
+      <group name="Common"/>
+      <file filename="../assets/levels/level1.xml"/>
+      <group name="Level1Data"/>
+   </level>
+</levelDescriptions>

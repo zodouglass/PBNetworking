@@ -128,7 +128,7 @@ package com.pblabs.networking.core
               // Just wait if we never were connected.
               if(!_wasConnected)
                   return;
-             Logger.printError(this, "SendPacket", "Could not send packet on a closed socket!");
+             Logger.error(this, "SendPacket", "Could not send packet on a closed socket!");
              NetworkInterface.instance.removeConnection(this);
              return;
           }
@@ -157,6 +157,8 @@ package com.pblabs.networking.core
          
          socket.writeBytes(ba, 0, PACKETSIZE + LENGTHFIELDSIZE);
          socket.flush();
+		 
+		// Logger.print(this, "transmitPacket" + getTimer() );
       }
       
        /**
@@ -217,14 +219,16 @@ package com.pblabs.networking.core
              if(firstDataLen == 15472)
              {
                 Logger.print(this, "sending cross-domain-policy XML response.");
-                
+                // this should already be handled through the Server
                 socket.writeUTFBytes(
                 "<?xml version=\"1.0\"?>" + 
                 "<!DOCTYPE cross-domain-policy SYSTEM \"/xml/dtds/cross-domain-policy.dtd\">"+
-                "<cross-domain-policy>"+
+                "<cross-domain-policy>" +
+				"<site-control permitted-cross-domain-policies=\"master-only\"/>" +
                 "<allow-access-from domain=\"*\" to-ports=\"1337\" />" + 
                 "</cross-domain-policy>");
                 socket.flush();
+				
                 return;
              }
              
@@ -304,23 +308,24 @@ package com.pblabs.networking.core
       private function connectHandler(event:Event):void 
       {
           _wasConnected = true;
-         Logger.printError(this, "connectHandler", event.toString());
+         Logger.error(this, "connectHandler", event.toString());
       }
  
       private function ioErrorHandler(event:IOErrorEvent):void 
       {
           _wasConnected = true;
-         Logger.printError(this, "ioErrorHandler", event.toString());
+         Logger.error(this, "ioErrorHandler", event.toString());
       }
  
       private function securityErrorHandler(event:SecurityErrorEvent):void 
       {
           _wasConnected = true;
-         Logger.printError(this, "securityErrorHandler", event.toString());
+         Logger.error(this, "securityErrorHandler", event.toString());
       }
  
       private function socketDataHandler(event:ProgressEvent):void 
       {
+		 // Logger.print(this, "socketDataHandler " + getTimer() );
           _wasConnected = true;
          readPackets();
       }

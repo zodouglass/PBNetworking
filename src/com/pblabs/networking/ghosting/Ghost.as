@@ -50,7 +50,7 @@ package com.pblabs.networking.ghosting
          _protocol = NetRoot.getByName(v);
          
          if(!_protocol)
-            Logger.printError(this, "set ProtocolName", "Could not find protocol '" + v + "'");   
+            Logger.error(this, "set ProtocolName", "Could not find protocol '" + v + "'");   
 
          // Set everything to dirty by default so we are in a consistent state.
          _protocol.setDirtyState(0xFFFFFFFF);
@@ -170,7 +170,7 @@ package com.pblabs.networking.ghosting
          // out the world.
          if(!isServerObject)
          {
-            //Logger.Print(this, "Skipping ghost as it is not a server object.");
+           // Logger.print(this, "Skipping ghost as it is not a server object.");
             return;
          }
          
@@ -188,7 +188,7 @@ package com.pblabs.networking.ghosting
             // Compare to stored value.
             if(propVal != tp.lastValue)
             {
-               //Logger.Print(this, "   Comparing " + propVal + " to " + tp.LastValue);
+               //Logger.print(this, "   Comparing " + propVal + " to " + tp.lastValue);
                
                // If different, mark dirty.
                dirtyBits |= _protocol.getElementDirtyBits(tp.protocolField);

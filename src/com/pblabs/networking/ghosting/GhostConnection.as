@@ -1,5 +1,6 @@
 package com.pblabs.networking.ghosting
 {
+   import com.pblabs.engine.debug.Logger;
    import com.pblabs.networking.core.BitStream;
    import com.pblabs.networking.events.EventConnection;
 
@@ -72,7 +73,7 @@ package com.pblabs.networking.ghosting
          super.readPacket(bs);
          
          // And give the ghosts a chance.
-         if(manager && isReceivingGhosts)
+         if (manager && isReceivingGhosts)
             manager.readPacket(bs);
       }
 

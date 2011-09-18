@@ -1,7 +1,7 @@
 package com.pblabs.networking.core
 {
    import com.pblabs.engine.debug.*;
-   import com.pblabs.engine.math.*;
+   import com.pblabs.engine.*;
    
    import flash.errors.*;
    import flash.utils.*;
@@ -182,7 +182,7 @@ package com.pblabs.networking.core
       public function writeRangedInt(v:int, min:int, max:int):void
       {
          var range:int = max - min + 1;
-         var bitCount:int = Utility.getBitCountForRange(range);
+         var bitCount:int = PBUtil.getBitCountForRange(range);
    
          writeInt(v - min, bitCount);
       }
@@ -194,7 +194,7 @@ package com.pblabs.networking.core
       public function readRangedInt(min:int, max:int):int
       {
          var range:int = max - min + 1;
-         var bitCount:int = Utility.getBitCountForRange(range);
+         var bitCount:int = PBUtil.getBitCountForRange(range);
          
          var res:int = readInt(bitCount) + min;
 

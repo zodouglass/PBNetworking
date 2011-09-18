@@ -1,0 +1,12 @@
+<things version="1">
+  <entity name="Platform1" >
+    <component type="com.pblabs.rendering2D.SimpleShapeRenderer" name="Renderer">
+         <isSquare>true</isSquare>
+         <scene entityName="Scene"/>
+      </component>
+  </entity>
+ 
+  <group name="Level1Data">
+    <!--<objectReference name="Platform1"/>-->
+  </group>
+</things>

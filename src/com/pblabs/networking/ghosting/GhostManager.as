@@ -154,6 +154,7 @@ package com.pblabs.networking.ghosting
        */
       public function readPacket(bs:BitStream):void
       {
+		 // Logger.print(this, "readPacket");
          if(DEBUG_SENTINELS) bs.assertByte("Packet pre sentinel", 0x1A);
          
          while(bs.readFlag())
@@ -201,7 +202,7 @@ package com.pblabs.networking.ghosting
                newGhost.ghostIndex = ghostId;
                newGhost.owningManager = this;
                
-               //Logger.Print(this, "Got ghost on id " + ghostId + ": " + newGhostTemplate);
+               //Logger.print(this, "Got ghost on id " + ghostId + ": " + newGhostTemplate);
             }
          }
       }
