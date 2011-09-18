@@ -1,1 +1,56 @@
-PBE Socket Server running Adobe AIR
+<html>
+<head>
+<title>Push Button Engine AIR Socket Server</title>
+<style>
+.code
+{
+	font-family:"Courier New";
+	background-color: #cccccc;
+}
+</style>
+</head>
+<body>
+<h1>Push Button Engine AIR Socket Server</h1>
+
+<h2>Step 1: Download Push Button Engine (using 1.0 for this demo)</h2>
+GitHub: <a href='https://github.com/PushButtonLabs/PushButtonEngine'>https://github.com/PushButtonLabs/PushButtonEngine</a>
+<br/>
+Googlecode: <a href='http://pushbuttonengine.googlecode.com/files/PushButtonEngine-r958-1.0.zip'>http://pushbuttonengine.googlecode.com/files/PushButtonEngine-r958-1.0.zip</a>
+<br/>
+
+<h2>Step 2: Download Push Button Networking</h2>
+Master: <a href='https://github.com/PushButtonLabs/PBNetworking'>https://github.com/PushButtonLabs/PBNetworking</a>
+<br/>
+AIR Fork: <a href='https://github.com/zodouglass/PBNetworking'>https://github.com/zodouglass/PBNetworking</a>
+
+<h2>Step 3: Create a AIR project (using Flex 4.1 / AIR 2.6 SDK for this demo).</h2>
+If you're using <strong>FlashBuilder</strong> or <strong>FlashDevelop</strong> as your IDE:
+<br/>
+Setup a new AS3 AIR 2.0 project, and set the project to compile airServerDemo/src/ServerMain.as
+<br/>
+<br/>
+If you're using <strong>Flash Professional</strong>, create a new AIR 2.0 .fla file, and set ServerMain.as as the Document Class
+<br/>
+Add class paths paths for PBE and PB Networking src folders
+<br/>
+
+<br/>
+Under Additional Compiler Options, make sure you add --keep-as3-metadata+=TypeHint,EditorData,Embed
+ (Note: Flex 4.5 introduced an error where it doesnt keep the Embed metadata.  More info here <a href='http://blog.natebeck.net/2011/05/flex-sdk-4-5-doesnt-keep-embed-metadata/'>http://blog.natebeck.net/2011/05/flex-sdk-4-5-doesnt-keep-embed-metadata/</a>)
+<br/>
+<br/>
+Make sure your application is using AIR 2.0:
+<div class="code">
+&lt;application xmlns="http://ns.adobe.com/air/application/2.0"&gt;
+</div>
+<br/>
+Compile and run, or package and install, the AIR application.
+
+<h2>Step 4: Extreme Multiplayer Click Demo</h2>
+Setup a new Flex 4 project.  The main client Application file is located under /airServerDemo/src/ClientMain.mxml
+<br/>
+Add library paths for PBE and PBNetworking.
+<br/>
+Compile and connect to the AIR server.  By default, it is running on port 1337.
+</body>
+</html>
