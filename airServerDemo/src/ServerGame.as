@@ -21,6 +21,7 @@ package
    
 	/**
 	* Implementation of server side game logic.
+	* Defines the networking protocol, handles net events sent from clients, starts PBE, and loads the level
 	*/ 
 	public class ServerGame implements IServerGame, IScoper
 	{
@@ -89,7 +90,7 @@ package
 				Logger.print(this, "Handling click!"+ ce.x + " " + ce.y);
 				_lastClickTime = PBE.processManager.virtualTime;
 				for each(var circle:IEntity in circles)
-					circle.setProperty(new PropertyReference("@Mover.goalPosition"), new Point(ce.x, ce.y));
+					circle.setProperty(new PropertyReference("@ServerMover.goalPosition"), new Point(ce.x, ce.y));
 			}
 		}
 
@@ -135,7 +136,7 @@ package
 			for(var i:int=0; i < 10; i++)
 			{
 				var newC:IEntity = PBE.templateManager.instantiateEntity("ServerCircle");
-				newC.setProperty(new PropertyReference("@Mover.initialPosition"), new Point(50 * i, 25));
+				newC.setProperty(new PropertyReference("@ServerMover.initialPosition"), new Point(50 * i, 25));
 				circles.push(newC);
 			}
 
@@ -155,7 +156,7 @@ package
 
 		//	Logger.print(this, "Moving ghosts.");
 			for each(var circle:IEntity in circles)
-				circle.setProperty(new PropertyReference("@Mover.goalPosition"), new Point( -320 + (640 * Math.random()), -120 + 240* Math.random()));
+				circle.setProperty(new PropertyReference("@ServerMover.goalPosition"), new Point( -320 + (640 * Math.random()), -120 + 240* Math.random()));
 		}
       
 		private var _lastClickTime:Number = 0;

@@ -22,6 +22,8 @@ package
 	
 	/**
 	 * A Simple example of using AIR 2.0 SocketServer class to run a PushButtonEngine Server
+	 * Listens for client socket connections, handles security for policy files, and contains a single instance of ServerGame.
+	 * This example only runs a single instance of the game, but could be expanded to host multiple "rooms" over different ports.
 	 * @author Zo Douglass
 	 */
 	public class ServerMain extends Sprite 

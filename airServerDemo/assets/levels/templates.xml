@@ -1,6 +1,6 @@
 <things version="1">  
   <template name="ServerCircle">
-      <component type="com.pblabs.rendering2D.Interpolated2DMoverComponent" name="Mover">
+      <component type="com.pblabs.rendering2D.Interpolated2DMoverComponent" name="ServerMover">
          <SpatialManager componentReference="SpatialDB"/>
          <TranslationSpeed>100</TranslationSpeed>
 		 <movementHeadingThreshold>360</movementHeadingThreshold>
@@ -10,8 +10,8 @@
 	   <component type="com.pblabs.rendering2D.SimpleShapeRenderer" name="Renderer">
          <isCircle>true</isCircle>
          <Radius>32</Radius>
-         <PositionProperty>@Mover.position</PositionProperty>
-         <RotationProperty>@Mover.rotation</RotationProperty>
+         <PositionProperty>@ServerMover.position</PositionProperty>
+         <RotationProperty>@ServerMover.rotation</RotationProperty>
          <scene entityName="Scene"/>
       </component>
       <component type="com.pblabs.networking.ghosting.GhostComponent" name="Ghost">
@@ -20,11 +20,11 @@
             <ProtocolName>CircleGhost</ProtocolName>
             <TrackedProperties>
                <_>
-                  <Property>@Mover.goalPosition.x</Property>
+                  <Property>@ServerMover.goalPosition.x</Property>
                   <ProtocolField>x</ProtocolField>
                </_>
                <_>
-                  <Property>@Mover.goalPosition.y</Property>
+                  <Property>@ServerMover.goalPosition.y</Property>
                   <ProtocolField>y</ProtocolField>
                </_>
             </TrackedProperties>
@@ -33,7 +33,7 @@
    </template>
 
    <template name="ClientCircle">
-      <component type="com.pblabs.rendering2D.Interpolated2DMoverComponent" name="Mover">
+      <component type="com.pblabs.rendering2D.Interpolated2DMoverComponent" name="ClientMover">
          <SpatialManager componentReference="SpatialDB"/>
          <TranslationSpeed>100</TranslationSpeed>
 		 <movementHeadingThreshold>360</movementHeadingThreshold>
@@ -42,8 +42,8 @@
       <component type="com.pblabs.rendering2D.SimpleShapeRenderer" name="Renderer">
          <isCircle>true</isCircle>
          <Radius>32</Radius>
-         <PositionProperty>@Mover.position</PositionProperty>
-         <RotationProperty>@Mover.rotation</RotationProperty>
+         <PositionProperty>@ClientMover.position</PositionProperty>
+         <RotationProperty>@ClientMover.rotation</RotationProperty>
          <scene entityName="Scene"/>
       </component>
       <component type="com.pblabs.networking.ghosting.GhostComponent" name="Ghost">
@@ -51,21 +51,21 @@
             <ProtocolName>CircleGhost</ProtocolName>
             <TrackedProperties>
                <_>
-                  <Property>@Mover.goalPosition.x</Property>
+                  <Property>@ClientMover.goalPosition.x</Property>
                   <ProtocolField>x</ProtocolField>
                </_>
                <_>
-                  <Property>@Mover.goalPosition.y</Property>
+                  <Property>@ClientMover.goalPosition.y</Property>
                   <ProtocolField>y</ProtocolField>
                </_>
                <_>
                   <InitialUpdateOnly>true</InitialUpdateOnly>
-                  <Property>@Mover.position.x</Property>
+                  <Property>@ClientMover.position.x</Property>
                   <ProtocolField>x</ProtocolField>
                </_>
                <_>
                   <InitialUpdateOnly>true</InitialUpdateOnly>
-                  <Property>@Mover.position.y</Property>
+                  <Property>@ClientMover.position.y</Property>
                   <ProtocolField>y</ProtocolField>
                </_>
             </TrackedProperties>
