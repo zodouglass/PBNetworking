@@ -56,20 +56,7 @@ package
 		
 		private function init(e:Event = null):void
 		{
-			Logger.print(this, "ServerSocket started");
-			
-			server.addEventListener(Event.CONNECT, onConnect);
-			
-			server.bind(port); // Pass in the port number you want to listen on
-			server.listen();
-			
-			policySocket.addEventListener( Event.CONNECT, onPolicyConnect );
-			policySocket.bind( 843 ); //843 is adobe's default server policy port where the client will first check for permissions
-			policySocket.listen();
-			
-			Logger.print(this,  "Running Policy File Server on port 843");
-			Logger.print(this, "Running Game Server on port " + port );
-			Logger.print(this,  "Starting PBE...");
+			Logger.print(this, "Game Server started");
 			
 			//register class types with PBE.  This is in a central location so both server and client can call this.
 			Resources.registerTypes();
@@ -85,11 +72,28 @@ package
 			
 			//PBE requires a scene at startup, so pass the server scene, which we can remove later
 			PBE.startup(scene);
+			Logger.print(this,  "Starting PBE...");
 			
+			//create the instance of the ServerGame
 			serverGame = new ServerGame();
+			
+			//setup our main game socket listener
+			server.addEventListener(Event.CONNECT, onConnect);
+			server.bind(port); // Pass in the port number you want to listen on
+			server.listen(); //start listening for connections
+			
+			//setup our security socket listener to return the policy file
+			policySocket.addEventListener( Event.CONNECT, onPolicyConnect );
+			policySocket.bind( 843 ); //843 is adobe's default server policy port where the client will first check for permissions
+			policySocket.listen();
+			
+			Logger.print(this,  "Running Policy File Server on port 843");
+			Logger.print(this, "Running Game Server on port " + port );
+			
+			//once the sockets are created, start the game
 			serverGame.onStart();
 			
-			//dedicated server doesnt need the scene view rendering, so remove the scene after startup
+			//dedicated server doesnt need the scene view rendering, so remove the scene after startup.  For now we'll just leave it for debugging
 			//removeChild(scene);
 		}
 		
