@@ -97,18 +97,18 @@ package
 		/**
 		* Called by the server binary when a connection comes in.
 		*/ 
-		public function onConnection(s:Socket):void
+		public function onConnection(clientSocket:Socket):void
 		{
 			// Set up the connection, and add it to the list.
-			var ec:GhostConnection = new GhostConnection();
-			ec.activateGhosting(true);
-			ec.scopeObject = this;
-			ec.acceptClientConnection(s, null, 0);
+			var connection:GhostConnection = new GhostConnection();
+			connection.activateGhosting(true);
+			connection.scopeObject = this;
+			connection.acceptClientConnection(clientSocket, null, 0);
 
 			// Send a welcome message.
-			ec.postEvent(new ChatEvent("Welcome to Circle Click: Multiplayer Edition!"));
+			connection.postEvent(new ChatEvent("Welcome to Circle Click: Multiplayer Edition!"));
 
-			ec.sendPacket();
+			connection.sendPacket();
 		}
       
 		/**
