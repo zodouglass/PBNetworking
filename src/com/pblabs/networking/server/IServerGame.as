@@ -26,5 +26,10 @@ package com.pblabs.networking.server
        * call AssignSocket, passing it the socket.
        */
       function onConnection(s:Socket):void;
+	  
+	  /**
+       * Called when a connection is closed on our listen port. 
+       */
+      function onDisconnect(s:Socket):void;
    }
 }

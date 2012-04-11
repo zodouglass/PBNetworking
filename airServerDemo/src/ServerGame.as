@@ -110,6 +110,14 @@ package
 
 			connection.sendPacket();
 		}
+		
+		/**
+		 * Called by the server when the connection is closed
+		 */
+		public function onDisconnect(s:Socket):void
+		{
+			
+		}
       
 		/**
 		* Scope callback; set all the circles in scope.
