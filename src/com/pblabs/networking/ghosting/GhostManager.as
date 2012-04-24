@@ -117,6 +117,10 @@ package com.pblabs.networking.ghosting
                   
                   // Yes, new ghost. Write its template name so the other end can make it.
                   bs.stringCache.write(bs, curGhost.ghostInstance.prototypeName);
+				  var entityName:String = curGhost.ghostInstance.entityName == null ? "0" : curGhost.ghostInstance.entityName; //used to indicate null value and avoid bitstream eof error
+				  bs.stringCache.write(bs, entityName );
+				  
+				  //bs.stringCache.write(bs, "TestGhostName"); //testing
                }
                
                // Serialize this ghost.
@@ -189,7 +193,10 @@ package com.pblabs.networking.ghosting
             {
                // Empty slot, this is a new ghost.
                var newGhostTemplate:String = bs.stringCache.read(bs);
-               var newGhost:Ghost = instanceFactory.makeGhost(newGhostTemplate);
+			   var entityName:String = bs.stringCache.read(bs);
+			   if ( entityName == "0" ) //in the writePacket method above, if the ghostInstance is null, a string of "0" is writting, indicating to use no name.
+					entityName = null;
+               var newGhost:Ghost = instanceFactory.makeGhost(newGhostTemplate, entityName);
                
                if(!newGhost)
                   throw new Error("Instantiated template '" + newGhostTemplate + "' with no GhostComponent, deleted it.");                   

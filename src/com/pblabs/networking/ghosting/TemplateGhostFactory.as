@@ -15,13 +15,13 @@ package com.pblabs.networking.ghosting
        */
       public var overrideTemplateManager:TemplateManager = null;
       
-      public function makeGhost(prototypeName:String):Ghost
+      public function makeGhost(prototypeName:String, entityName:String=null):Ghost
       {
          var tm:TemplateManager = overrideTemplateManager;
          if(!tm) tm = PBE.templateManager;
          
          // Try instantiating the specified template.
-         var entity:IEntity = tm.instantiateEntity(prototypeName);
+         var entity:IEntity = tm.instantiateEntity(prototypeName, entityName);
          if(!entity)
             return null;
          

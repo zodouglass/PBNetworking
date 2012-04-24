@@ -10,6 +10,6 @@ package com.pblabs.networking.ghosting
        * Make an object instance using the specified prototype name, and
        * return a reference to the Ghost that controls it.
        */
-      function makeGhost(prototypeName:String):Ghost;
+      function makeGhost(prototypeName:String, entityName:String=null):Ghost;
    }
 }
