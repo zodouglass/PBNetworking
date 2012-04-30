@@ -40,11 +40,6 @@ package com.pblabs.networking.ghosting
        * typically name of an object from the TemplateManager.
        */
       public var prototypeName:String = null;
-	  
-	  /**
-	   * String passed to the clients to indicate the name of the entity that should be created when the template is created.
-	   */
-	  public var entityName:String = null;
       
       /**
        * The protocol element from the NetRoot library that will be used to
