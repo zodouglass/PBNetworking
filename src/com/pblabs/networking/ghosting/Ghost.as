@@ -179,7 +179,7 @@ package com.pblabs.networking.ghosting
          // For each property...
          for each(var tp:TrackedProperty in trackedProperties)
          {
-            if(tp.initialUpdateOnly && !_firstCheck)
+            if(tp.initialUpdateOnly)
                continue;
                
             // Get its current value.
@@ -198,8 +198,6 @@ package com.pblabs.networking.ghosting
                tp.lastValue = propVal;
             }
          }
-		 
-		 _firstCheck = false;
          
          // Set dirty bits based on what changed.
          markDirty(dirtyBits);
@@ -251,6 +249,5 @@ package com.pblabs.networking.ghosting
       }
 
       private var _protocol:NetRoot = null; 
-	  private var _firstCheck:Boolean = true;
    }
 }
