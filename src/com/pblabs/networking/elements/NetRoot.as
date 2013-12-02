@@ -69,6 +69,8 @@ package com.pblabs.networking.elements
          return nr;
       }
       
+	  private static var newElemName:String; //temp object
+	  
       private static function parseFromXML(x:XML, container:INetElementContainer):void
       {
          for each(var e:XML in x.*)
@@ -76,31 +78,31 @@ package com.pblabs.networking.elements
             var ne:INetElement = null;
             
             // Identify the kind of element we need to add...
-            var newElemName:String  = e.name().toString();
+            newElemName  = e.name().toString().toLowerCase(); //store toLowerCase result in static var to reduce calls to toLowerCase (it uses a lot of memory allocation )
             
-            if(newElemName.toLowerCase() == "string")
+            if(newElemName == "string")
             {
                ne = new StringElement();
             }
-            else if(newElemName.toLowerCase() == "cachedstring")
+            else if(newElemName == "cachedstring")
             {
                ne = new CachedStringElement();
             }
-            else if(newElemName.toLowerCase() == "float")
+            else if(newElemName == "float")
             {
                ne = new FloatElement();
             }
-            else if(newElemName.toLowerCase() == "flag")
+            else if(newElemName == "flag")
             {
                ne = new FlagElement();
                parseFromXML(e, ne as INetElementContainer);
             }
-            else if(newElemName.toLowerCase() == "dirtyflag")
+            else if(newElemName == "dirtyflag")
             {
                ne = new DirtyFlagElement();
                parseFromXML(e, ne as INetElementContainer);
             }
-            else if(newElemName.toLowerCase() == "rangedint")
+            else if(newElemName == "rangedint")
             {
                ne = new RangedIntElement();
             }
